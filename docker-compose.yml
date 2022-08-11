@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+    nginx:
+        build: ./nginx/
+        container_name: laravel-nginx
+        working_dir: /home/shooop
+        ports:
+            - 8080:80
+        volumes:
+            - ./src:/home/shooop
+    php:
+        build: ./php/
+        container_name: laravel-php
+        working_dir: /home/shooop
+        volumes: 
+            - ./src:/home/shooop
+            - ./src/storage/logs/php-fpm:/var/log/php-fpm
+        env_file:
+            - ./src/.env
+    db:
+        container_name: laravel-db
+        image: mariadb:10.6.5
+        env_file:
+            - ./mysql/.env
+        volumes:
+            - ./mysql/data:/var/lib/mysql
+        ports:
+            - 3330:3306
